@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity() {
     val editT by lazy { findViewById<EditText>(R.id.editT) }
     val progressBar by lazy {findViewById<ProgressBar>(R.id.progress_Bar)}
 
-    var condition = 1
+    var condition: Int? = null
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,14 +26,14 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         val viewModel = ViewModelProvider(this)[MainViewModel::class.java]
-//        condition = viewModel.stateFlow2.value
+        condition = viewModel.stateFlow2.value
+        changeCondition()
 
         btn.isEnabled = false
-//        progressBar.setProgress(viewModel.stateFlow.value)
-//        changeCondition()
+
         editT.addTextChangedListener {
             openButton()
-            condition = 1
+            condition = viewModel.stateFlow2.value
             changeCondition()
         }
 
@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity() {
             viewModel.stateFlow2.collect { it: Int -> condition = it
                 changeCondition()}
         }
-        changeCondition()
+
         btn.setOnClickListener {
             viewModel.countingDown()
             changeCondition()
